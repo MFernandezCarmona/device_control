@@ -29,6 +29,23 @@ namespace device_control
 
 using std::placeholders::_1;
 
+ControlledLifecycleNode::ControlledLifecycleNode(const std::string & system_id, const rclcpp::NodeOptions & node_options)
+: LifecycleNode(system_id, node_options)
+{
+  device_control_sub_ = create_subscription<device_control_msgs::msg::Control>(
+    "device_control", rclcpp::QoS(100).reliable(),
+    std::bind(&ControlledLifecycleNode::control_callback, this, _1));
+
+  device_control_pub_ = create_publisher<device_control_msgs::msg::Control>(
+    "device_control", rclcpp::QoS(100).reliable());
+
+  device_info_pub_ = create_publisher<device_control_msgs::msg::DeviceInfo>(
+    "device_environment", rclcpp::QoS(1000).reliable().transient_local().keep_all());
+
+  device_control_pub_->on_activate();
+  device_info_pub_->on_activate();
+}
+
 ControlledLifecycleNode::ControlledLifecycleNode(const std::string & system_id)
 : LifecycleNode(system_id)
 {

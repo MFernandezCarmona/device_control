@@ -29,7 +29,8 @@ namespace device_control
 class ControlledLifecycleNode : public rclcpp_lifecycle::LifecycleNode
 {
 public:
-  explicit ControlledLifecycleNode(const std::string & system_id);
+  ControlledLifecycleNode(const std::string & system_id);
+  ControlledLifecycleNode(const std::string & system_id, const rclcpp::NodeOptions & node_options);
 
 protected:
   template<typename MessageT, typename AllocatorT = std::allocator<void>>
